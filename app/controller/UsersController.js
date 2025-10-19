@@ -1,28 +1,28 @@
-export const Registration=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"Registration"})
-}
-
-export const Login=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"Login"})
-}
+import RegiModel from "../model/RejistrationModel.js";
+import UsersModel from "../model/UsersModel.js";
 
 
-export const ProfileDetails=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"ProfileDetails"})
-}
+// POST → /api/InsertData
+export const InseartData = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    if (!name || !email) {
+      return res.status(400).json({ error: "Name and Email are required" });
+    }
 
-export const ProfileUpdate=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"ProfileUpdate"})
-}
+    const user = await UsersModel.create({ name, email });
+    res.status(201).json({ message: "User inserted successfully", user });
+  } catch (err) {
+    console.error("Error inserting user:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
-export const EmailVerify=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"EmailVerify"})
-}
+export const regi = async(req,res) => {
 
-export const CodeVerify=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"CodeVerify"})
-}
+  const bodyy =  req.body 
 
-export const ResetPassword=async(req,res)=>{
-    return res.status(200).json({status:"success","Message":"ResetPassword"})
+   const user=await RegiModel.create(bodyy) ;
+   res.send(user)
+    
 }
