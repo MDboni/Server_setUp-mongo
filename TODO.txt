@@ -1,0 +1,25 @@
+https://task.teamrabbil.com/Login
+
+1. Project File Structure
+2. Project Package
+        npm i cors
+        npm i express
+        npm i express-rate-limit
+        npm i helmet
+        npm i jsonwebtoken
+        npm i mongoose
+        npm i nodemailer
+        npm i nodemon
+
+3. Route Config
+
+4. App.js Config
+
+5. Project Run nodemon app.js
+
+
+
+
+
+
+
