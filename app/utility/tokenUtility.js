@@ -1,16 +1,25 @@
-const jwt=require('jsonwebtoken');
+import jwt from "jsonwebtoken";
 
-export const TokenEncode=(email,user_id)=>{
-
-    let KEY="123-ABC-XYZ";
-    let EXPIRE={expiresIn: '24h'}
-    let PAYLOAD={email:email, user_id:user_id}
-    return jwt.sign(PAYLOAD,KEY,EXPIRE)
-
-
+export const EncodeToken = ( email, user_id) =>{
+    try {
+        const PAYLOAD = { email , user_id} ;
+        const token = jwt.sign(PAYLOAD, process.env.JWT_SECRET , {expiresIn: process.env.JWT_EXPIRE || '24h'})
+       
+        return token ;
+    } catch (error) {
+        console.error("❌ Token Encode Error:", err.message);
+        return null;
+    }
 }
 
-export const TokenDecode=(token)=>{
 
-
+// ✅ JWT Decode Function
+export const DecodeToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        return decoded
+    } catch (error) {
+        console.error("❌ Token Decode Error:", err.message);
+        return null;
+    }
 }
