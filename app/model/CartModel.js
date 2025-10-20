@@ -11,4 +11,4 @@ const DataSchema = new mongoose.Schema({
   {timestamps:true,versionKey:false}
 )
 
-const CartModel = mongoose.model('',DataSchema)
+const CartModel = mongoose.model('carts',DataSchema)

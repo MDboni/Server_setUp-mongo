@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const DataSchema = new mongoose({
+const DataSchema = new mongoose.Schema({
     title:{type:String,required:true},
         shortDes:{type:String,required:true},
         price:{type:String,required:true},
