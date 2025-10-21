@@ -1,4 +1,5 @@
-const {DecodeToken} = require("../utility/TokenHelper");
+import { DecodeToken } from "../utility/tokenUtility.js"
+
 
 export default (req,res,next)=>{
 
