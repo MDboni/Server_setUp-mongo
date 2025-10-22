@@ -4,6 +4,8 @@ import *as ProductController from '../app/controller/ProductController.js'
 import *as UserController from '../app/controller/UserController.js'
 import *as WishListController from '../app/controller/WishListController.js'
 import *as CartListController from '../app/controller/CartListController.js'
+import *as InvoiceController from '../app/controller/InvoiceController.js'
+import *as FeaturesController from '../app/controller/FeaturesController.js'
 import  AuthMiddleware from '../app/middlewares/AuthMiddleware.js'
 
 
@@ -43,6 +45,21 @@ router.delete('/RemoveCartListControler', AuthMiddleware ,    CartListController
 router.get('/CartistControler', AuthMiddleware ,    CartListController.CartistControler )
 
 
+// Invoice Api ..............
+
+router.get('/CreateInvoice',AuthMiddleware,InvoiceController.CreateInvoice)
+
+router.get('/InvoiceList',AuthMiddleware,InvoiceController.InvoiceList)
+router.get('/InvoiceProductList/:invoice_id',AuthMiddleware,InvoiceController.InvoiceProductList)
+
+router.post('/PaymentSuccess/:trxID',AuthMiddleware,InvoiceController.PaymentSuccess)
+router.post('/PaymentFail/:trxID',AuthMiddleware,InvoiceController.PaymentFail)
+router.post('/PaymentCancel/:trxID',AuthMiddleware,InvoiceController.PaymentCancel)
+router.post('/PaymentIPN/:trxID',AuthMiddleware,InvoiceController.PaymentIPN)
+
+// feature ============================
+router.get('/FeaturesList',AuthMiddleware,FeaturesController.FeaturesList)
+router.get('/LegalDetails/:type',AuthMiddleware,FeaturesController.LegalDetails)
 
 
 
