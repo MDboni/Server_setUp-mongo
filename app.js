@@ -8,11 +8,17 @@ import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
 import router from './routes/api.js';
 import { DATABASE, MAX_JSON_SIZE, PORT, REQUEST_NUMBER, REQUEST_TIME, URL_ENCODE, WEB_CACHE } from './app/config/config.js';
 
+dotenv.config();
 const app = express();
+
+// ✅ ES Module এ __dirname fix করতে হবে
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 🔹 Default Middleware
 app.use(cors());
@@ -32,15 +38,21 @@ app.use(limiter);
 app.set('etag', WEB_CACHE);
 
 // 🔹 MongoDB Connection
-const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.zhalbrt.mongodb.net/${process.env.DB_NAME}`; // ✅ database name add করো
+const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.zhalbrt.mongodb.net/${process.env.DB_NAME}`;
 mongoose.connect(URI)
   .then(() => console.log("✅ Database Connected"))
   .catch((err) => console.error("❌ Database Error:", err));
 
-
-app.use(express.static('client/dist'))
-// 🔹 Routes
+// 🔹 Routes (API)
 app.use("/api", router);
+
+// 🔹 Serve Frontend (Vite build folder)
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
+// 🔹 React Router fallback route
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+});
 
 // 🔹 Start Server
 app.listen(PORT, () => {
