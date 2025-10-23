@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ProductStore from "../../Store/ProductStore";
 
 const AppNavbar = () => {
+  const {SearchKeyword,SetSearchKeyword} =ProductStore()
   return (
     <>
       {/* ===== Topbar ===== */}
@@ -75,14 +77,15 @@ const AppNavbar = () => {
               {/* Search Box */}
               <div className="input-group">
                 <input
+                 onChange={(e)=>SetSearchKeyword(e.target.value)}
                   className="form-control"
                   type="search"
                   placeholder="Search products..."
                   aria-label="Search"
                 />
-                <button className="btn btn-outline-secondary" type="submit">
+                <Link to={SetSearchKeyword.length>0?`/by-Keyword/${SearchKeyword}`:'/'} className="btn btn-outline-secondary" type="submit">
                   <i className="bi bi-search"></i>
-                </button>
+                </Link>
               </div>
 
               {/* Cart Button */}

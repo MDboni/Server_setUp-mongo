@@ -1,4 +1,4 @@
-import { BrandListService, CategoryListService, DetailsService, ListByBrandService, ListByCategoryService, ListByKeywordService, ListByRemarkService, ReviewListService, SliderListService } from "../services/ProductServices.js";
+import { BrandListService, CategoryListService, DetailsService, ListByBrandService, ListByCategoryService, ListByFilterService, ListByKeywordService, ListByRemarkService, ReviewListService, SliderListService } from "../services/ProductServices.js";
 
 export const ProductBrandList = async (req, res) => {
   const result = await BrandListService();
@@ -108,9 +108,13 @@ export const ProductReviewList = async(req , res) =>{
   }
 }
 
-export const ProductListByFilter = async(req , res) =>{
-    
-}
+
 export const CreateReview = async(req , res) =>{
     
+}
+
+
+export const ProductListByFilter=async(req,res)=>{
+    let result=await ListByFilterService(req);
+    return res.status(200).json(result)
 }

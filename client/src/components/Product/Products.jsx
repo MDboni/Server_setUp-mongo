@@ -1,11 +1,19 @@
-import React from 'react'
+import  { useEffect } from 'react'
 import ProductStore from '../../Store/ProductStore'
 import { Link } from 'react-router-dom'
 import StarRatings from "react-star-ratings";
 
 
 const Products = () => {
-    const {BrandListRequest,ListByRemarkStore}=ProductStore()
+    const {ListByRemarkStore,ListByRemarkRequest}=ProductStore()
+    console.log(ListByRemarkStore);
+
+    useEffect(() => {
+    (async () => {
+      await ListByRemarkRequest("new");
+    })();
+  }, []);
+    
   return (
     <div className="section">
   <div className="container-fluid py-5 bg-light">
@@ -24,7 +32,7 @@ const Products = () => {
           >
             <li className="nav-item" role="presentation">
               <button
-                onClick={() => {BrandListRequest('new')}}
+                onClick={() => {ListByRemarkRequest('new')}}
                 className="nav-link active"
                 id="pills-home-tab"
                 data-bs-toggle="pill"
@@ -40,7 +48,7 @@ const Products = () => {
 
             <li className="nav-item" role="presentation">
               <button
-                onClick={() => {BrandListRequest("trending")}}
+                onClick={() => {ListByRemarkRequest("trending")}}
                 className="nav-link"
                 id="pills-profile-tab"
                 data-bs-toggle="pill"
@@ -56,7 +64,7 @@ const Products = () => {
 
             <li className="nav-item" role="presentation">
               <button
-                onClick={() => {BrandListRequest('popular')}}
+                onClick={() => {ListByRemarkRequest('popular')}}
                 className="nav-link"
                 id="pills-contact-tab"
                 data-bs-toggle="pill"
@@ -72,7 +80,7 @@ const Products = () => {
 
             <li className="nav-item" role="presentation">
               <button
-                onClick={() => {BrandListRequest('top')}}
+                onClick={() => {ListByRemarkRequest('top')}}
                 className="nav-link"
                 id="pills-disabled-tab"
                 data-bs-toggle="pill"
@@ -88,7 +96,7 @@ const Products = () => {
 
             <li className="nav-item" role="presentation">
               <button
-                onClick={() => {BrandListRequest('special')}}
+                onClick={() => {ListByRemarkRequest('special')}}
                 className="nav-link"
                 id="pills-disabled-tab"
                 data-bs-toggle="pill"
@@ -114,7 +122,7 @@ const Products = () => {
             >
               <div className="container">
   <div className="row">
-    {ListByRemarkStore.map((item) => {
+    {ListByRemarkStore.map((item,i) => {
       // Price logic
       const price = item.discount === 'true' ? (
         <p className="bodyMedium text-dark my-1">
@@ -125,7 +133,7 @@ const Products = () => {
       );
 
       return (
-        <div key={item._id} className="col-md-3 p-2 col-lg-3 col-sm-6 col-12">
+        <div key={i} className="col-md-3 p-2 col-lg-3 col-sm-6 col-12">
           <Link to={`/By-product/${item._id}`} className="card shadow-sm h-100 rounded-3 bg-white">
             <img className="w-100 rounded-top-2" src={item.image} alt={item.title} />
             <div className="card-body">

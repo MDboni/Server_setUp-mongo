@@ -183,7 +183,62 @@ export const ReviewListService = async(req , res)=>{
 export const CreateReviewService = async(req , res)=>{
 
 } 
-export const ListByFilterService = async(req , res)=>{
 
+
+export const ListByFilterService = async (req) => {
+    try {
+    // ===== Match by category & brand =====
+    let matchConditions = {};
+    if (req.body['categoryID']) {
+      matchConditions.categoryID = new ObjectId(req.body['categoryID']);
+    }
+    if (req.body['brandID']) {
+      matchConditions.brandID = new ObjectId(req.body['brandID']);
+    }
+    let MatchStage = { $match: matchConditions };
+
+    // ===== Convert price to numeric safely =====
+    let AddFieldsStage = {
+      $addFields: {
+        numericPrice: {
+          $convert: { input: "$price", to: "int", onError: 0, onNull: 0 }
+        }
+      }
+    };
+
+    // ===== Price filter =====
+    let priceMin = parseInt(req.body['priceMin']) || 0;
+    let priceMax = parseInt(req.body['priceMax']) || 999999;
+    let PriceMatchStage = {
+      $match: {
+        numericPrice: { $gte: priceMin, $lte: priceMax }
+      }
+    };
+
+    // ===== Lookup & join =====
+    let JoinWithBrandStage = { $lookup: { from: "brands", localField: "brandID", foreignField: "_id", as: "brand" } };
+    let JoinWithCategoryStage = { $lookup: { from: "categories", localField: "categoryID", foreignField: "_id", as: "category" } };
+    let UnwindBrandStage = { $unwind: "$brand" };
+    let UnwindCategoryStage = { $unwind: "$category" };
+
+    // ===== Project fields =====
+    let ProjectionStage = { $project: { 'brand._id': 0, 'category._id': 0, 'categoryID': 0, 'brandID': 0 } };
+
+    // ===== Aggregate pipeline =====
+    const data = await ProductModel.aggregate([
+      MatchStage,
+      AddFieldsStage,
+      PriceMatchStage,
+      JoinWithBrandStage,
+      JoinWithCategoryStage,
+      UnwindBrandStage,
+      UnwindCategoryStage,
+      ProjectionStage
+    ]);
+
+    return { status: "success", data: data };
+  } catch (e) {
+    return { status: "fail", error: e.message };
+  }
 } 
 
