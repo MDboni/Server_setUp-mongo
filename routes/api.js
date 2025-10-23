@@ -58,7 +58,7 @@ router.post('/PaymentCancel/:trxID',AuthMiddleware,InvoiceController.PaymentCanc
 router.post('/PaymentIPN/:trxID',AuthMiddleware,InvoiceController.PaymentIPN)
 
 // feature ============================
-router.get('/FeaturesList',AuthMiddleware,FeaturesController.FeaturesList)
+router.get('/FeaturesList',FeaturesController.FeaturesList)
 router.get('/LegalDetails/:type',AuthMiddleware,FeaturesController.LegalDetails)
 
 

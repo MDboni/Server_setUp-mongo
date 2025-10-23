@@ -1,4 +1,3 @@
-import React from "react";
 import Lottie from "lottie-react";
 import Skeleton from "react-loading-skeleton";
 import animation from "../assets/images/image.json"; // Lottie animation import
@@ -10,7 +9,7 @@ const FeatersSkeleton = () => {
         {
             Array.from({length:4}).map(()=>{
                 return(
-                     <div className="col-6 col-sm-6 col-md-3 col-lg-3 p-2">
+                     <div  className="col-6 col-sm-6 col-md-3 col-lg-3 p-2">
                         <div className="card shadow-sm">
                             <div className="card-body">
                             <div className="row align-items-center">

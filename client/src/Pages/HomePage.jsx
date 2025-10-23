@@ -1,19 +1,38 @@
 
+import { useEffect } from "react"
 import Layoutt from "../components/Layout/Layoutt"
-import BrandsSkeleton from "../Skeleton/BrandsSkeleton"
-import CategoriesSkeleton from "../Skeleton/CategoriesSkeleton"
-import FeatersSkeleton from "../Skeleton/FeatersSkeleton"
-import ProductSkeleton from "../Skeleton/ProductSkeleton"
-import SliderSkeleton from "../Skeleton/SliderSkeleton"
+import FeatureStoreZustin from "../Store/FetereStore"
+import ProductStore from "../Store/ProductStore"
+import Featers from "../components/Featars/Featers"
+import Categories from "../components/Product/Categories"
+import Brands from "../components/Product/Brands"
+import Slider from "../components/Product/Slider"
+import Products from "../components/Product/Products"
 
 const HomePage = () => {
+
+  const { FeatureListRequest } = FeatureStoreZustin();
+  const { BrandListRequest ,CategoryListRequest,SliderListRequest,ListByRemarkRequest} = ProductStore();
+
+  useEffect(() => {
+    // ✅ IIFE (Immediately Invoked Function)
+    (async () => {
+      await FeatureListRequest();
+      await BrandListRequest();
+      await CategoryListRequest();
+      await SliderListRequest();
+      await ListByRemarkRequest('new');
+    })();
+  }, []);
+
+
   return (
     <Layoutt>
-       <SliderSkeleton/>
-       <FeatersSkeleton/>
-       <CategoriesSkeleton/>
-       <ProductSkeleton/>
-       <BrandsSkeleton/>
+       <Slider/>
+       <Featers/>
+       <Categories/>
+       <Products/>
+       <Brands/>
     </Layoutt>
   )
 }

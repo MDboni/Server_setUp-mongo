@@ -19,7 +19,7 @@ export const DecodeToken = (token) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         return decoded
     } catch (error) {
-        console.error("❌ Token Decode Error:", err.message);
+        console.error("❌ Token Decode Error:", error.message);
         return null;
     }
 }
