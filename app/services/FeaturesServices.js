@@ -6,7 +6,7 @@ export const FeaturesListService  = async () =>{
     try {
         const data= await FeaturesModel.find();
         return {status:"success",data:data}
-    } catch (error) {
+    } catch (e) {
         return {status:"fail",data:e}.toString()
     }
 }

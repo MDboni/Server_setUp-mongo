@@ -87,6 +87,12 @@ ProductListByCategoryRequest: async (CategoryID) => {
     }
   },
 
+  SearchKeyword:"",
+   SetSearchKeyword:async(keyword)=>{
+        set({SearchKeyword:keyword})
+  },
+
+
 ProductListByKeywordRequest: async (Keyword) => {
     try {
       const res = await axios.get(`/api/ProductListByKeyword/${Keyword}`);
@@ -96,14 +102,47 @@ ProductListByKeywordRequest: async (Keyword) => {
       }
     } catch (error) {    
       console.error("ListByRemarkRequest Error:", error.message);
+    } 
+  },
+
+ ProductListByFilterRequest: async (FilterData = {}) => {
+  try {
+    const res = await axios.post(`/api/ProductListByFilter`, FilterData);
+
+    if (res.data.status === "success") {
+      set({ ProductListByBCK: res.data.data });
+    }
+  } catch (error) {
+    console.error("ProductListByFilterRequest Error:", error.message);
+  }
+},
+ 
+
+  ProductDetailsStore : [] ,
+  ProductDetailsStoreRequest: async (ProductID) => {
+    try {
+      const res = await axios.get(`/api/ProductDetails/${ProductID}`);
+
+      if (res.data.status === "success") {
+        set({ ProductDetailsStore: res.data.data });
+      }
+    } catch (error) {    
+      console.error("ListByRemarkRequest Error:", error.message);
     }
   },
 
+  ProductReviewListStore : [] ,
+  ProductReviewListRequest: async (id) => {
+    try {
+      const res = await axios.get(`/api/ProductReviewList/${id}`);
 
-   SearchKeyword:"",
-   SetSearchKeyword:async(keyword)=>{
-        set({SearchKeyword:keyword})
-  },
+      if (res.data.status === "success") {
+        set({ ProductReviewList: res.data.data });
+      }
+    } catch (error) {    
+      console.error("ProductReviewList Error:", error.message);
+    }
+  }
 
   
 }))

@@ -2,9 +2,35 @@
 import { Link } from "react-router-dom";
 import ProductStore from "../../Store/ProductStore";
 import StarRatings from "react-star-ratings";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const ListByProducts = () => {
-  const { ProductListByBCK } = ProductStore();
+  const { ProductListByBCK ,BrandStore, BrandListRequest, CategoryStore, CategoryListRequest ,ProductListByFilterRequest } = ProductStore();
+  const [ Filter,SetFilter ] = useState({brandID:"", categoryID:"", priceMax:"", priceMin:""})
+
+  const inputOnChange = (name,value)=>{
+    SetFilter((data)=>({
+      ...data,
+      [name]:value
+    }))
+  }
+ 
+
+  useEffect(() => {
+      (async () => {
+        if (BrandStore === null) await BrandListRequest();
+        if (CategoryStore === null) await CategoryListRequest();
+
+        let isEmpty = Object.values(Filter).every(v => v === "");
+        if (isEmpty) {
+          await ProductListByFilterRequest({}); 
+        } else {
+          await ProductListByFilterRequest(Filter);
+      }
+      })();
+}, [Filter]);
+
 
   return (
     <div>
@@ -12,25 +38,58 @@ const ListByProducts = () => {
         <div className="row">
             <div className="col-md-3">
               <div className="card w-100 p-3 shadow-sm">
+
                   <label className="form-label mt-3">Brands</label>
-                  <select className="form-control form-select">
-                      <option value="">Choose Brand</option>
+                  <select
+                    className="form-control form-select"
+                    value={Filter.brandID}
+                    onChange={(e) => inputOnChange("brandID", e.target.value)}
+                  >
+                    <option value="">Choose Brand</option>
+                    {BrandStore && BrandStore.length > 0 ? (
+                      BrandStore.map((item, i) => (
+                        <option key={i} value={item._id}>
+                          {item.brandName}
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>No Brands Found</option>
+                    )}
                   </select>
 
                   <label className="form-label mt-3">Categories</label>
-                  <select className="form-control form-select">
+                  <select
+                    className="form-control form-select"
+                    value={Filter.categoryID}
+                    onChange={(e) => inputOnChange("categoryID", e.target.value)}
+                  >
                     <option value="">Choose Category</option>
+                    {CategoryStore && CategoryStore.length > 0 ? (
+                      CategoryStore.map((item, i) => (
+                        <option key={i} value={item._id}>
+                          {item.categoryName}
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>No Categories Found</option>
+                    )}
                   </select>
 
-                  <label className="form-label mt-3">Maximum Price $</label>
+
+                  <label className="form-label mt-3">Maximum Price ${Filter.priceMax}</label>
                   <input 
+                   value={Filter.priceMax}
+                   onChange={(e)=>{inputOnChange('priceMax',e.target.value)}}
                     min={0} 
                     max={100000} 
                     step={1000} 
                     type="range" 
                     className="form-range" 
                   />
+                   <label className="form-label mt-3">Minimum Price ${Filter.priceMin}</label>
                   <input 
+                   value={Filter.priceMin}
+                   onChange={(e)=>{inputOnChange('priceMin',e.target.value)}}
                     className="form-range" 
                     min={0} 
                     max={100000} 

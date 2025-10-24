@@ -14,7 +14,7 @@ const App = () => {
          <Route path='/by-brand/:id' element={<ByBrand/>}/>
          <Route path='/by-categori/:id' element={<ByCategory/>}/>
          <Route path='/by-Keyword/:Keyword' element={<ByKewordPage/>}/>
-         <Route path='/By-product/:id' element={<ByProductDetails/>}/>
+         <Route path='/By-product/:ProductID' element={<ByProductDetails/>}/>
          <Route path='/By-product/:Remark' element={<Byproduct/>}/>
        </Routes>
     </BrowserRouter>
