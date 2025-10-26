@@ -26,6 +26,9 @@ const AppNavbar = () => {
         })()
     }, []);
 
+    
+
+    
   return (
     <>
       {/* Topbar */}

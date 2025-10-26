@@ -26,20 +26,20 @@ const Details = () => {
         }
     }
 
-    const AddCart = async ()=>{
-        if (!selectedColor || !selectedSize) {
-          toast.error("Please select color and size");
-           return;
-         }
+const AddCart = async (PostBody, quantity, productID) => {
+  if (!PostBody.color || !PostBody.size) {
+    toast.error("Please select color and size");
+    return;
+  }
 
-          const PostBody = { color: selectedColor, size: selectedSize };
-          const res = await CartSaveOrUpdateRequest(PostBody, ProductDetailsStore[0]?._id, quantity);
-    
-          if (res) {
-            toast.success("Cart Item Added");
-            await CartListRequest();
-          }
-        }
+  const res = await CartSaveOrUpdateRequest(PostBody, productID, quantity);
+
+  if (res) {
+    toast.success("Cart Item Added");
+    await CartListRequest(); // এখানে CartCount update হবে
+  }
+}
+
   
   if(!ProductDetailsStore || ProductDetailsStore.length === 0 ){
     return <DetailsSkeleton/>

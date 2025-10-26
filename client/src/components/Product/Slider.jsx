@@ -39,7 +39,14 @@ const Slider = () => {
                             <div className="container">
                                 <div className="row justify-content-center align-items-center">
                                     <div className="col-12 col-lg-5 col-md-5 col-sm-12 p-5">
-                                        <h1 className="headline-1">{item.title}</h1>
+                                      <div className="w-full bg-gray-100 border-t-4 border-b-4 border-gray-800 overflow-hidden py-4">
+                                            <div className="inline-block whitespace-nowrap animate-marquee">
+                                                <h1 className="text-black font-bold text-3xl tracking-wide uppercase">
+                                                A Warm Welcome from Boni Amin
+                                                </h1>
+                                            </div>
+                                        </div>
+
                                         <p>{item.des}</p>
                                         <Link to={`/product/${item.productID}`} className="btn btn-success text-white px-5">
                                             Buy Now
@@ -47,8 +54,7 @@ const Slider = () => {
                                     </div>
                                     <div className="col-12 col-lg-5 col-md-5 col-sm-12 p-5">
                                         <img 
-                                            src={item.image || "/images/default-slider.png"} 
-                                            onError={(e) => e.target.src = "/images/default-slider.png"} 
+                                            src={item.image} 
                                             className="w-100" 
                                             alt={item.title} 
                                         />

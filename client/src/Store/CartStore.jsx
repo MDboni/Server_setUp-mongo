@@ -60,40 +60,39 @@ CartSaveOrUpdateRequest: async (PostBody, productID, quantity, isUpdate = false)
 
   // 🧮 Load Cart List
   CartListRequest: async () => {
-    try {
-      const res = await axios.get(`/api/CartListControler`);
-      const data = res.data["data"];
+  try {
+   const res = await axios.get("/api/CartistControler", {
+    headers: { user_id: localStorage.getItem("user_id") } 
+});
 
-      if (!data) {
-        console.warn("No cart data found");
-        return false;
-      }
+    const data = res.data["data"] || [];
 
-      set({ CartList: data });
-      set({ CartCount: data.length });
+    // 💰 Total Calculation
+    let total = 0;
+    data.forEach((item) => {
+      const price = item.product.discount
+        ? parseInt(item.product.discountPrice)
+        : parseInt(item.product.price);
+      total += parseInt(item.qty) * price;
+    });
 
-      // 💰 Total Calculation
-      let total = 0;
-      data.forEach((item) => {
-        const price = item.product.discount
-          ? parseInt(item.product.discountPrice)
-          : parseInt(item.product.price);
-        total += parseInt(item.qty) * price;
-      });
+    const vat = total * 0.05;
+    const payable = total + vat;
 
-      const vat = total * 0.05;
-      const payable = vat + total;
+    // ✅ একবারে সব set
+    set({
+      CartList: data,
+      CartCount: data.length,
+      CartTotal: total,
+      CartVatTotal: vat,
+      CartPayableTotal: payable,
+    });
 
-      set({
-        CartTotal: total,
-        CartVatTotal: vat,
-        CartPayableTotal: payable,
-      });
+    return true;
+  } catch (error) {
+    console.error("CartListRequest Error:", error);
+    return false;
+  }
+}
 
-      return true;
-    } catch (error) {
-      console.error("CartListRequest Error:", error);
-      return false;
-    }
-  },
 }));

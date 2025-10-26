@@ -20,9 +20,8 @@ const Featers = () => {
                                     <div className="col-3">
                                         <img
                                             className="w-100"
-                                            src={feature?.image || "/images/default-feature.png"}
-                                            onError={(e) => (e.target.src = "/images/default-feature.png")}
-                                            alt={feature.name || "Feature"}
+                                            src={feature?.image }
+                                            alt={feature.name}
                                         />
                                     </div>
                                     <div className="col-9">
