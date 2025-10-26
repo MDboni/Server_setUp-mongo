@@ -49,7 +49,7 @@ export const UserStore = create((set,get)=>({
     if(res.data.status){
         const token = res.data.token ;
         if(token){
-            Cookies.set('token',token) ;
+            Cookies.set('token',token , { expires: 7, secure: true, sameSite: 'Lax' }) ;
             set({ token })
         }
         return true ; 

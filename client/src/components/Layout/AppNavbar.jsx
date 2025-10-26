@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import ProductStore from "../../Store/ProductStore";
 import { UserStore } from "../../Store/UserStore";
+import { CartStore } from "../../Store/CartStore";
+import { useEffect } from "react";
 
 const AppNavbar = () => {
   const { SearchKeyword, SetSearchKeyword } = ProductStore();
+  const CartCount = CartStore((state) => state.CartCount);
+  const CartListRequest = CartStore((state) => state.CartListRequest);
+
   const {isLogin , UserLogoutRequest} = UserStore()
 
   const LogOutHandel = async () => {
@@ -12,6 +17,14 @@ const AppNavbar = () => {
     localStorage.clear();
     window.location.href = "/";
   };
+
+    useEffect(() => {
+        (async ()=>{
+            if(isLogin()){
+                await  CartListRequest();
+            }
+        })()
+    }, []);
 
   return (
     <>
@@ -77,8 +90,9 @@ const AppNavbar = () => {
                 </Link>
               </div>
 
-              <Link to="/cart" className="btn ms-2 btn-light position-relative">
-                <i className="bi bi-bag text-dark"></i>
+              <Link to="/cart" type="button" className="btn ms-2 btn-light position-relative">
+                    <i className="bi text-dark bi-bag"></i>
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{CartCount}</span>
               </Link>
 
               <Link to="/wish" className="btn ms-2 btn-light d-flex">

@@ -4,11 +4,17 @@ import DetailsSkeleton from '../../Skeleton/DetailsSkeleton'
 import parse from 'html-react-parser';
 import ProductImages from './ProductImages';
 import Reviews from './Reviews';
+import CartSubmitButton from '../Carts/CartSubmitButton';
+import { CartStore } from '../../Store/CartStore';
+import toast from 'react-hot-toast';
 
 const Details = () => {
   const{ ProductDetailsStore }=ProductStore()
-
+  const { CartSaveOrUpdateRequest,CartListRequest }= CartStore()
   const [quantity,SetQuantity ] = useState(1)
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+
 
   const incrementQuantity =()=>{
     SetQuantity(quantity=> quantity+1)
@@ -19,6 +25,21 @@ const Details = () => {
             SetQuantity(quantity=>quantity-1)
         }
     }
+
+    const AddCart = async ()=>{
+        if (!selectedColor || !selectedSize) {
+          toast.error("Please select color and size");
+           return;
+         }
+
+          const PostBody = { color: selectedColor, size: selectedSize };
+          const res = await CartSaveOrUpdateRequest(PostBody, ProductDetailsStore[0]?._id, quantity);
+    
+          if (res) {
+            toast.success("Cart Item Added");
+            await CartListRequest();
+          }
+        }
   
   if(!ProductDetailsStore || ProductDetailsStore.length === 0 ){
     return <DetailsSkeleton/>
@@ -46,7 +67,7 @@ const Details = () => {
               <div className="row">
                 <div className="col-4 p-2">
                   <label className="bodySmal">Size</label>
-                  <select className="form-control my-2 form-select">
+                  <select value={selectedSize}  onChange={(e) => setSelectedSize(e.target.value)} className="form-control my-2 form-select">
                     <option value="">Size</option>
                     {
                       ProductDetailsStore[0].detail?.size?.split(",").map((item,i)=>{
@@ -58,7 +79,7 @@ const Details = () => {
 
                 <div className="col-4 p-2">
                   <label className="bodySmal">Color</label>
-                  <select className="form-control my-2 form-select">
+                  <select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)} className="form-control my-2 form-select">
                     <option value="">Color</option>
                     {
                       ProductDetailsStore[0].detail?.color?.split(",").map((item,i)=>{
@@ -83,7 +104,9 @@ const Details = () => {
                 </div>
 
                 <div className="col-4 p-2">
-                  <button className="btn w-100 btn-success">Add to Cart</button>
+                  <CartSubmitButton 
+                  onClick={()=>{AddCart({color: selectedColor , size:selectedSize},quantity,ProductDetailsStore[0]?._id)}} 
+                  className="btn w-100 btn-success" >Add to Cart</CartSubmitButton>
                 </div>
 
                 <div className="col-4 p-2">
