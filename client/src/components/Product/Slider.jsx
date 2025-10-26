@@ -46,7 +46,12 @@ const Slider = () => {
                                         </Link>
                                     </div>
                                     <div className="col-12 col-lg-5 col-md-5 col-sm-12 p-5">
-                                        <img src={item.image} className="w-100" alt={item.title} />
+                                        <img 
+                                            src={item.image || "/images/default-slider.png"} 
+                                            onError={(e) => e.target.src = "/images/default-slider.png"} 
+                                            className="w-100" 
+                                            alt={item.title} 
+                                        />
                                     </div>
                                 </div>
                             </div>

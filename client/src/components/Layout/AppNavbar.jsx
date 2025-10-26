@@ -1,12 +1,21 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import ProductStore from "../../Store/ProductStore";
+import { UserStore } from "../../Store/UserStore";
 
 const AppNavbar = () => {
-  const {SearchKeyword,SetSearchKeyword} =ProductStore()
+  const { SearchKeyword, SetSearchKeyword } = ProductStore();
+  const {isLogin , UserLogoutRequest} = UserStore()
+
+  const LogOutHandel = async () => {
+    await UserLogoutRequest();
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = "/";
+  };
+
   return (
     <>
-      {/* ===== Topbar ===== */}
+      {/* Topbar */}
       <div className="container-fluid text-white p-2" style={{ backgroundColor: "#1F2937" }}>
         <div className="container">
           <div className="row justify-content-between align-items-center">
@@ -28,102 +37,62 @@ const AppNavbar = () => {
         </div>
       </div>
 
-      {/* ===== Main Navbar ===== */}
+      {/* Navbar */}
       <nav className="navbar sticky-top navbar-expand-lg shadow-sm" style={{ backgroundColor: "#FFFFFF" }}>
         <div className="container">
-          {/* Brand Logo */}
           <Link className="navbar-brand" to="/">
-            <img
-              className="img-fluid"
-              src="/logo.png"
-              alt="Logo"
-              width="110"
-              height="auto"
-            />
+            <img src="/logo.png" alt="Logo" width="110" />
           </Link>
 
-          {/* Mobile Toggle */}
           <button
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#mainNav"
-            aria-controls="mainNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          {/* Menu Links */}
           <div className="collapse navbar-collapse" id="mainNav">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item me-3">
-                <Link className="nav-link fw-semibold text-dark" to="/">Home</Link>
-              </li>
-              <li className="nav-item me-3">
-                <Link className="nav-link fw-semibold text-dark" to="/shop">Shop</Link>
-              </li>
-              <li className="nav-item me-3">
-                <Link className="nav-link fw-semibold text-dark" to="/about">About</Link>
-              </li>
-              <li className="nav-item me-3">
-                <Link className="nav-link fw-semibold text-dark" to="/contact">Contact</Link>
-              </li>
+              <li className="nav-item me-3"><Link className="nav-link fw-semibold text-dark" to="/">Home</Link></li>
+              <li className="nav-item me-3"><Link className="nav-link fw-semibold text-dark" to="/shop">Shop</Link></li>
+              <li className="nav-item me-3"><Link className="nav-link fw-semibold text-dark" to="/about">About</Link></li>
+              <li className="nav-item me-3"><Link className="nav-link fw-semibold text-dark" to="/contact">Contact</Link></li>
             </ul>
 
-            {/* ===== Search & Icons ===== */}
             <div className="d-flex align-items-center">
-              {/* Search Box */}
               <div className="input-group">
                 <input
-                 onChange={(e)=>SetSearchKeyword(e.target.value)}
+                  onChange={(e) => SetSearchKeyword(e.target.value)}
                   className="form-control"
                   type="search"
                   placeholder="Search products..."
-                  aria-label="Search"
                 />
-                <Link to={SetSearchKeyword.length>0?`/by-Keyword/${SearchKeyword}`:'/'} className="btn btn-outline-secondary" type="submit">
+                <Link
+                  to={SearchKeyword.length > 0 ? `/by-Keyword/${SearchKeyword}` : '/'}
+                  className="btn btn-outline-secondary"
+                >
                   <i className="bi bi-search"></i>
                 </Link>
               </div>
 
-              {/* Cart Button */}
-              <Link
-                to="/cart"
-                type="button"
-                className="btn ms-2 btn-light position-relative"
-              >
+              <Link to="/cart" className="btn ms-2 btn-light position-relative">
                 <i className="bi bi-bag text-dark"></i>
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  
-                </span>
               </Link>
 
-              {/* Wishlist */}
-              <Link
-                to="/wish"
-                type="button"
-                className="btn ms-2 btn-light d-flex"
-              >
+              <Link to="/wish" className="btn ms-2 btn-light d-flex">
                 <i className="bi bi-heart text-danger"></i>
               </Link>
 
-              {/* Profile & Logout */}
-              <Link
-                type="button"
-                className="btn ms-3 btn-primary d-flex text-white"
-                to="/profile"
-              >
-                Profile
-              </Link>
-              <Link
-                type="button"
-                className="btn ms-2 btn-outline-primary d-flex"
-                to="/logout"
-              >
-                Logout
-              </Link>
+              {isLogin() ? (
+                <>
+                  <Link className="btn ms-3 btn-primary d-flex text-white" to="/profile">Profile</Link>
+                  <button onClick={LogOutHandel} className="btn ms-2 btn-outline-primary d-flex">Logout</button>
+                </>
+              ) : (
+                <Link className="btn ms-2 btn-outline-primary d-flex" to="/login">Login</Link>
+              )}
             </div>
           </div>
         </div>

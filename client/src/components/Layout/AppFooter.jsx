@@ -13,13 +13,13 @@ const AppFooter = () => {
               <h5 className="fw-bold mb-3 text-uppercase text-secondary">Legals</h5>
               <ul className="list-unstyled">
                 <li className="mb-2">
-                  <Link className="text-decoration-none text-dark" to="/">About</Link>
+                  <Link className="text-decoration-none text-dark" to="/about">About</Link>
                 </li>
                 <li className="mb-2">
-                  <Link className="text-decoration-none text-dark" to="/">Refund Policy</Link>
+                  <Link className="text-decoration-none text-dark" to="/refund">Refund Policy</Link>
                 </li>
                 <li className="mb-2">
-                  <Link className="text-decoration-none text-dark" to="/">Terms</Link>
+                  <Link className="text-decoration-none text-dark" to="/terms">Terms</Link>
                 </li>
               </ul>
             </div>
@@ -29,13 +29,13 @@ const AppFooter = () => {
               <h5 className="fw-bold mb-3 text-uppercase text-secondary">Information</h5>
               <ul className="list-unstyled">
                 <li className="mb-2">
-                  <Link className="text-decoration-none text-dark" to="/">How to Buy</Link>
+                  <Link className="text-decoration-none text-dark" to="/howtoBuy">How to Buy</Link>
                 </li>
                 <li className="mb-2">
-                  <Link className="text-decoration-none text-dark" to="/">Contact</Link>
+                  <Link className="text-decoration-none text-dark" to="/contact">Contact</Link>
                 </li>
                 <li className="mb-2">
-                  <Link className="text-decoration-none text-dark" to="/">Complain</Link>
+                  <Link className="text-decoration-none text-dark" to="/complain">Complain</Link>
                 </li>
               </ul>
             </div>

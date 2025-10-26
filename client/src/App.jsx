@@ -5,6 +5,15 @@ import ByCategory from './Pages/ByCategory'
 import Byproduct from './Pages/Byproduct'
 import ByProductDetails from './Pages/ByProductDetails'
 import ByKewordPage from './Pages/ByKewordPage'
+import AboutPage from './Pages/FooterPage/AboutPage'
+import RefundPage from './Pages/FooterPage/RefundPage'
+import TermsPage from './Pages/FooterPage/TermsPage'
+import HowToBuy from './Pages/FooterPage/HowToBuy'
+import ContactPahe from './Pages/FooterPage/ContactPahe'
+import ComplainePage from './Pages/FooterPage/ComplainePage'
+import LoginPage from './Pages/LoginPage'
+import OtpPage from './Pages/OtpPage'
+import ProfileFormPage from './Pages/ProfileFormPage'
 
 const App = () => {
   return (
@@ -16,6 +25,15 @@ const App = () => {
          <Route path='/by-Keyword/:Keyword' element={<ByKewordPage/>}/>
          <Route path='/By-product/:ProductID' element={<ByProductDetails/>}/>
          <Route path='/By-product/:Remark' element={<Byproduct/>}/>
+         <Route path='/about' element={<AboutPage/>}/>
+         <Route path='/refund' element={<RefundPage/>}/>
+         <Route path='/terms' element={<TermsPage/>}/>
+         <Route path='/howtoBuy' element={<HowToBuy/>}/>
+         <Route path='/contact' element={<ContactPahe/>}/>
+         <Route path='/complain' element={<ComplainePage/>}/>
+         <Route path='/login' element={<LoginPage/>}/>
+         <Route path='/otp' element={<OtpPage/>}/>
+         <Route path='/profile' element={<ProfileFormPage/>}/>
        </Routes>
     </BrowserRouter>
   )

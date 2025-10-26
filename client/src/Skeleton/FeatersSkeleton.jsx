@@ -7,9 +7,9 @@ const FeatersSkeleton = () => {
     <div className="container section">
       <div className="row">
         {
-            Array.from({length:4}).map(()=>{
+            Array.from({length:4}).map((_,i)=>{
                 return(
-                     <div  className="col-6 col-sm-6 col-md-3 col-lg-3 p-2">
+                     <div key={i}  className="col-6 col-sm-6 col-md-3 col-lg-3 p-2">
                         <div className="card shadow-sm">
                             <div className="card-body">
                             <div className="row align-items-center">

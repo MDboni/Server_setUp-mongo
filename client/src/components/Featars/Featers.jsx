@@ -4,12 +4,11 @@ import FeatureStoreZustin from "../../Store/FetereStore";
 const Featers = () => {
     const { FeatureStore } = FeatureStoreZustin();
 
-    // data na thakle skeleton show 
+    // data না থাকলে skeleton show
     if (!FeatureStore) {
         return <FeatersSkeleton />;
     }
 
-    // data main content
     return (
         <div className="container section">
             <div className="row">
@@ -19,7 +18,12 @@ const Featers = () => {
                             <div className="card-body">
                                 <div className="row">
                                     <div className="col-3">
-                                        <img className="w-100" src={feature.image || ""} alt={feature.name} />
+                                        <img
+                                            className="w-100"
+                                            src={feature?.image || "/images/default-feature.png"}
+                                            onError={(e) => (e.target.src = "/images/default-feature.png")}
+                                            alt={feature.name || "Feature"}
+                                        />
                                     </div>
                                     <div className="col-9">
                                         <h3 className="bodyXLarge">{feature.name}</h3>

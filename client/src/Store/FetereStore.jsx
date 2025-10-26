@@ -15,6 +15,23 @@ const FeatureStoreZustin = create((set) => ({
       console.error("FeatureListRequest Error:", error.message);
     }
   },
+
+LegalDetailsStore: null,
+
+LegalDetailsRequest: async (type) => {
+  try {
+    const res = await axios.get(`/api/LegalDetails/${type}`);
+    if (res.data.status === "success") {
+      set({ LegalDetailsStore: res.data.data[0] }); // কারণ API তে array আসছে
+    } else {
+      set({ LegalDetailsStore: null });
+    }
+  } catch (error) {
+    console.error("LegalDetailsRequest Error:", error.message);
+    set({ LegalDetailsStore: null });
+  }
+},
+
 }));
 
 export default FeatureStoreZustin;

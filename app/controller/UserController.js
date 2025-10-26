@@ -16,12 +16,7 @@ export const VerifyOtpController = async (req, res) => {
   const result = await VerifyOtpService(req);
 
   if (result.status === "success") {
-    let cookieOption = {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
-      httpOnly: true, // safer for auth cookies
-      sameSite: "none",
-      secure: true,
-    };
+   let cookieOption = {expires: new Date(Date.now() + 24*60*60*1000), httpOnly: false}
 
     res.cookie("token", result.token, cookieOption);
     return res.status(200).json(result);
@@ -83,4 +78,6 @@ export const ReadProfileControler = async(req,res) =>{
   } catch (error) {
        return res.status(500).json({ status: "fail",message: "Internal Server Error",error: error.message });
   } 
+
+  
 }
