@@ -3,12 +3,13 @@ import ProductStore from "../../Store/ProductStore";
 import { UserStore } from "../../Store/UserStore";
 import { CartStore } from "../../Store/CartStore";
 import { useEffect } from "react";
+import WishStore from "../../Store/WishStore";
 
 const AppNavbar = () => {
   const { SearchKeyword, SetSearchKeyword } = ProductStore();
   const CartCount = CartStore((state) => state.CartCount);
   const CartListRequest = CartStore((state) => state.CartListRequest);
-
+  const {WishCount,WishListRequest } = WishStore()
   const {isLogin , UserLogoutRequest} = UserStore()
 
   const LogOutHandel = async () => {
@@ -18,13 +19,21 @@ const AppNavbar = () => {
     window.location.href = "/";
   };
 
-    useEffect(() => {
-        (async ()=>{
-            if(isLogin()){
-                await  CartListRequest();
-            }
-        })()
-    }, []);
+   useEffect(() => {
+  const fetchData = async () => {
+    try {
+      if (isLogin()) {
+        await CartListRequest();
+        await WishListRequest();
+      }
+    } catch (error) {
+      console.error("Navbar fetch error:", error);
+    }
+  };
+
+  fetchData();
+}, [CartListRequest, WishListRequest, isLogin]);
+
 
     
 
@@ -98,8 +107,9 @@ const AppNavbar = () => {
                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{CartCount}</span>
               </Link>
 
-              <Link to="/wish" className="btn ms-2 btn-light d-flex">
+              <Link to="/wish" className="btn ms-2 btn-light position-relative">
                 <i className="bi bi-heart text-danger"></i>
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{WishCount}</span>
               </Link>
 
               {isLogin() ? (

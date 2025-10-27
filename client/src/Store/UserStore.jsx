@@ -3,6 +3,18 @@ import { getEmail, setEmail } from "../utility/utility";
 import Cookies from "js-cookie";
 import axios from "axios";
 
+
+
+const unauthorized = (status) => {
+    if (status === 401) {
+        alert("Session expired. Please login again.");
+        window.location.href = "/login"; 
+    } else {
+        console.warn("Unhandled status:", status);
+    }
+};
+
+
 export const UserStore = create((set,get)=>({
 
     token: Cookies.get('token') || "", 
@@ -68,77 +80,101 @@ export const UserStore = create((set,get)=>({
   },
   
 
-    UserLogoutRequest: async () => {
-        const token = Cookies.get("token");
-        if (!token) return false;
+ UserLogoutRequest: async () => {
+  try {
+    set({ isFormSubmit: true });
 
-        try {
-            set({ isFormSubmit: true });
-            const res = await axios.get(`/api/UserLogOut`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true, 
-        });
+    const res = await axios.get("/UserLogOut");
 
-            set({ isFormSubmit: false });
+    set({ isFormSubmit: false });
 
-            if (res.data.status === "success") {
-            Cookies.remove("token");
-            set({ token: "" });
-            return true;
-            }
-            return false;
-        } catch (error) {
-            console.error("Logout failed:", error);
-            set({ isFormSubmit: false });
-            return false;
-        }
-} ,
+    if (res.data.status === "success") {
+      // ✅ Token remove (forcefully)
+      Cookies.remove("token", { path: "/", secure: true, sameSite: "Lax" });
+      localStorage.clear();
+      sessionStorage.clear();
+      set({ token: "" });
+      return true;
+    }
 
+    return false;
+  } catch (error) {
+    console.error("Logout failed:", error);
+    set({ isFormSubmit: false });
+    // even if backend fails, clear local token
+    Cookies.remove("token", { path: "/", secure: true, sameSite: "Lax" });
+    set({ token: "" });
+    return false;
+  }
+}
+,
 
 
 // Profile data api =============================================
 
 
-    ProfileForm:{cus_add:"",cus_city:"",cus_country:"",cus_fax:"",cus_name:"",cus_phone:"",cus_postcode:"",cus_state:"",ship_add:"",ship_city:"",ship_country:"",ship_name:"",ship_phone:"",ship_postcode:"",ship_state:""},
-    ProfileChange:(name,value)=>{
-        set((state)=>({
-            ProfileForm:{
-                ...state.ProfileForm ,
-                [name]:value
-            } 
-        }))
-     } ,
+    // Profile Form state
+    ProfileForm: {
+        cus_add: "",
+        cus_city: "",
+        cus_country: "",
+        cus_fax: "",
+        cus_name: "",
+        cus_phone: "",
+        cus_postcode: "",
+        cus_state: "",
+        ship_add: "",
+        ship_city: "",
+        ship_country: "",
+        ship_name: "",
+        ship_phone: "",
+        ship_postcode: "",
+        ship_state: ""
+    },
 
-
-     ProfileDetails:null,
-     ProfileDetailsRequest:async()=>{
-        try {
-            const res = await axios.get('/api/ReadProfileControler');
-            if(res.data['data'].length>0){
-                set({ProfileDetails:res.data['data'][0]})
-                set({ProfileForm:res.data['data'][0]})
-            }else{
-                 set({ProfileDetails:[]})
+    // Profile form value change
+    ProfileChange: (name, value) => {
+        set((state) => ({
+            ProfileForm: {
+                ...state.ProfileForm,
+                [name]: value
             }
-        } catch (error) {
-               unauthorized(e.response.status)
+        }));
+    },
 
-        }
-     },
+    // Profile details state
+    ProfileDetails: null,
 
-
-     ProfileSaveRequest:async(PostBody)=>{
+    // Fetch profile details from backend
+    ProfileDetailsRequest: async () => {
         try {
-            set({ProfileDetails:null})
-            let res=await axios.post(`/api/UpdateProfile`,PostBody);
+            const res = await axios.get('/api/ReadProfileControler', {
+                headers: { user_id: localStorage.getItem("user_id") }
+            });
+            if (res.data['data'] && res.data['data'].length > 0) {
+                set({ ProfileDetails: res.data['data'][0] });
+                set({ ProfileForm: res.data['data'][0] });
+            } else {
+                set({ ProfileDetails: [] });
+            }
+        } catch (e) {
+            unauthorized(e.response?.status);
+        }
+    },
+
+    // Save/Update profile
+    ProfileSaveRequest: async (PostBody) => {
+        try {
+            set({ ProfileDetails: null });
+            let res = await axios.post(`/api/UpdateProfile`, PostBody, {
+                headers: { user_id: localStorage.getItem("user_id") }
+            });
             return res.data['status'] === "success";
-        }catch (e) {
-            unauthorized(e.response.status)
+        } catch (e) {
+            unauthorized(e.response?.status);
+            return false;
         }
     }
-
 
 
     
