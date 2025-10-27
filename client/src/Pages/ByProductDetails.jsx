@@ -6,7 +6,7 @@ import ListByProducts from '../components/Product/ListByProducts'
 import Details from '../components/Product/Details'
 
 const ByProductDetails = () => {
-  const {ProductDetailsStore,ProductDetailsStoreRequest} = ProductStore()
+  const { ProductDetailsStoreRequest} = ProductStore()
   const { ProductID } = useParams()
 
   useEffect(()=>{

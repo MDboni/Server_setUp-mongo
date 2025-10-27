@@ -40,10 +40,12 @@ const Slider = () => {
                                 <div className="row justify-content-center align-items-center">
                                     <div className="col-12 col-lg-5 col-md-5 col-sm-12 p-5">
                                       <div className="w-full bg-gray-100 border-t-4 border-b-4 border-gray-800 overflow-hidden py-4">
-                                            <div className="inline-block whitespace-nowrap animate-marquee">
-                                                <h1 className="text-black font-bold text-3xl tracking-wide uppercase">
-                                                A Warm Welcome from Boni Amin
-                                                </h1>
+                                            <div className="bg-light border-dark py-3 overflow-hidden">
+                                                <div className="marquee">
+                                                    <h3 className="fw-bold text-uppercase text-dark">
+                                                    A Warm Welcome from Boni Amin
+                                                    </h3>
+                                                </div>
                                             </div>
                                         </div>
 

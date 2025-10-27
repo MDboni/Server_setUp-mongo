@@ -7,10 +7,13 @@ import Reviews from './Reviews';
 import CartSubmitButton from '../Carts/CartSubmitButton';
 import { CartStore } from '../../Store/CartStore';
 import toast from 'react-hot-toast';
+import WishStore from '../../Store/WishStore';
+import WishSubmitButton from '../Wish/WishSubmitButton';
 
 const Details = () => {
   const{ ProductDetailsStore }=ProductStore()
   const { CartSaveOrUpdateRequest,CartListRequest }= CartStore()
+  const { WishSaveUpdateRequest,WishListRequest } = WishStore()
   const [quantity,SetQuantity ] = useState(1)
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -36,9 +39,22 @@ const AddCart = async (PostBody, quantity, productID) => {
 
   if (res) {
     toast.success("Cart Item Added");
-    await CartListRequest(); // এখানে CartCount update হবে
+    await CartListRequest(); 
   }
 }
+
+const AddWish = async (productID) => {
+  if (!productID) {
+    toast.error("Product ID missing");
+    return;
+  }
+
+  const res = await WishSaveUpdateRequest(productID);
+  if (res) {
+    toast.success("Wish Added");
+    await WishListRequest();
+  }
+};
 
   
   if(!ProductDetailsStore || ProductDetailsStore.length === 0 ){
@@ -58,7 +74,7 @@ const AddCart = async (PostBody, quantity, productID) => {
               <p className="bodySmal mb-2 mt-1">{ProductDetailsStore[0].shortDes}</p>
               {
                   ProductDetailsStore[0]['discount']?(
-                      <span className="bodyXLarge">Price: <strike class="text-secondary">{ProductDetailsStore[0]['price']}</strike> {ProductDetailsStore[0]['discountPrice']} </span>
+                      <span className="bodyXLarge">Price: <strike className="text-secondary">{ProductDetailsStore[0]['price']}</strike> {ProductDetailsStore[0]['discountPrice']} </span>
                   ):(
                       <span className="bodyXLarge">Price: {ProductDetailsStore[0]['price']}</span>
                   )
@@ -110,7 +126,14 @@ const AddCart = async (PostBody, quantity, productID) => {
                 </div>
 
                 <div className="col-4 p-2">
-                  <button className="btn w-100 btn-success">Add to Wish</button>
+                  <WishSubmitButton
+                      onClick={() => AddWish(ProductDetailsStore[0]?._id)}
+                      className="btn w-100 btn-success"
+                    >
+                      Add to Wish
+                  </WishSubmitButton>
+
+
                 </div>
               </div>
             </div>
